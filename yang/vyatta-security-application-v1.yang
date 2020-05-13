@@ -1,0 +1,152 @@
+module vyatta-security-application-v1 {
+	namespace "urn:vyatta.com:mgmt:vyatta-security-application:1";
+	prefix vyatta-security-application-v1;
+
+	import vyatta-security-v1 {
+		prefix security;
+	}
+	import vyatta-fw-types-v1 {
+		prefix fw-types;
+	}
+	import vyatta-npf-v1 {
+		prefix npf;
+	}
+	import vyatta-dpi-v1 {
+		prefix dpi;
+	}
+	import configd-v1 {
+		prefix configd;
+	}
+
+	organization "AT&T Inc.";
+	contact
+		"AT&T
+		 Postal: 208 S. Akard Street
+		         Dallas, TX 75202, USA
+		 Web: www.att.com";
+
+	description
+		"Copyright (c) 2019-2020, AT&T Intellectual Property.
+		 All rights reserved.
+
+		 Copyright (c) 2017 by Brocade Communications Systems, Inc.
+		 All rights reserved.
+
+		 Redistribution and use in source and binary forms,
+		 with or without modification, are permitted provided
+		 that the following conditions are met:
+
+		 1. Redistributions of source code must retain the
+		    above copyright notice, this list of conditions and
+		    the following disclaimer.
+		 2. Redistributions in binary form must reproduce
+		    the above copyright notice, this list of conditions
+		    and the following disclaimer in the documentation
+		    and/or other materials provided with the distribution.
+		 3. Neither the name of the copyright holder nor the
+		    names of its contributors may be used to endorse or
+		    promote products derived from this software without
+		    specific prior written permission.
+
+		 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS
+		 AND CONTRIBUTORS 'AS IS' AND ANY EXPRESS OR IMPLIED
+		 WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+		 WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+		 PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
+		 THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+		 ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
+		 OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+		 TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
+		 OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+		 HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+		 IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+		 NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+		 USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
+		 OF SUCH DAMAGE.
+
+		 SPDX-License-Identifier: BSD-3-Clause
+
+		 YANG module for DPI under security application.";
+
+	revision 2020-05-12 {
+		description "Corrected contact address.
+			     Added BSD-3-Clause license.
+			     Add engine node.
+			     Removed vyatta-dpi-status.";
+	}
+	revision 2019-04-11 {
+		description "Added vyatta-dpi-status.";
+	}
+	revision 2017-03-03 {
+		description "Initial revision.";
+	}
+
+	grouping rule-app-fw {
+		leaf description {
+			type string;
+			description "Application rule description";
+			configd:help "Application rule description";
+		}
+		uses npf:action-fw-pbr;
+		uses dpi:dpi-protocol;
+		uses dpi:dpi-name;
+		uses dpi:dpi-type;
+		uses dpi:dpi-engine;
+	}
+
+	augment /security:security {
+		container application {
+			configd:priority "300";
+			description "Application configuration";
+			configd:help "Application configuration";
+			configd:end "end-fw-groups";
+			container firewall {
+				description "Application firewall configuration";
+				configd:help "Application firewall configuration";
+				list name {
+					description "Application firewall ruleset";
+					configd:help "Application firewall ruleset";
+					configd:delete "vyatta-dp-npf.pl --variant=app-firewall --cmd=delete-group --group=$VAR(@)";
+					configd:end "end-app-fw-ruleset $VAR(@)";
+					key "ruleset-name";
+					leaf ruleset-name {
+						description "Ruleset name";
+						type fw-types:rule-name {
+							configd:help "Ruleset name";
+						}
+					}
+					leaf description {
+						type string;
+						description "Ruleset description";
+						configd:help "Ruleset description";
+					}
+					leaf no-match-action {
+						description "Action when no match (default is drop)";
+						configd:help "Action when no match (default is drop)";
+						type enumeration {
+							enum "drop" {
+								description "Drop if no application rules match (default)";
+								configd:help "Drop if no application rules match (default)";
+							}
+							enum "accept" {
+								description "Accept if no application rules match";
+								configd:help "Accept if no application rules match";
+							}
+						}
+						default "drop";
+						configd:end "vyatta-dp-npf.pl --variant=app-firewall --cmd=no-match-action --group='$VAR(../@)'";
+					}
+					list rule {
+						description "Rule number";
+						configd:help "Rule number";
+						key "rule-number";
+						leaf "rule-number" {
+							type fw-types:rule-number;
+						}
+						uses rule-app-fw;
+					}
+				}
+			}
+		}
+	}
+}

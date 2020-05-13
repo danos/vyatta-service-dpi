@@ -1,0 +1,106 @@
+Source: vyatta-service-dpi
+Section: contrib/net
+Priority: optional
+Maintainer: Vyatta Package Maintainers <DL-vyatta-help@att.com>
+Build-Depends: debhelper (>= 9),
+ dh-yang,
+ pkg-config,
+Standards-Version: 3.9.8
+
+Package: vyatta-dpi-v1-yang
+Architecture: all
+Section: contrib/admin
+Depends: ${misc:Depends},
+ ${yang:Depends},
+Description: config and op-mode yang for DPI
+ The Vyatta configuration and op-mode YANG for DPI
+
+Package: vyatta-ndpi-v1-yang
+Architecture: all
+Section: contrib/admin
+Depends: ${misc:Depends},
+ ${yang:Depends}
+Description: config yang for nDPI
+ The Vyatta configuration YANG for nDPI
+
+Package: vyatta-op-ndpi-v1-yang
+Architecture: all
+Section: contrib/admin
+Depends: ${misc:Depends},
+ ${yang:Depends}
+Description: operational CLI yang for DPI
+ The Vyatta operational YANG for nDPI
+
+Package: vyatta-policy-pbr-dpi-v1-yang
+Architecture: all
+Section: contrib/admin
+Depends: ${misc:Depends},
+ ${yang:Depends},
+Description: config yang for policy-pbr-dpi
+ The Vyatta configuration YANG for policy-pbr-dpi
+
+Package: vyatta-policy-qos-dpi-v1-yang
+Architecture: all
+Section: contrib/admin
+Depends: ${misc:Depends},
+ ${yang:Depends},
+Description: config yang for policy-qos-dpi
+ The Vyatta configuration YANG for policy-qos-dpi
+
+Package: vyatta-security-application-v1-yang
+Architecture: all
+Section: contrib/admin
+Depends: ${misc:Depends},
+ ${yang:Depends}, vplane-config-npf, vyatta-security-firewall-v1-yang,
+Description: config yang for security-application
+ The Vyatta configuration YANG for security-application
+
+Package: vyatta-security-firewall-dpi-v1-yang
+Architecture: all
+Section: contrib/admin
+Depends: ${misc:Depends},
+ ${yang:Depends},
+Description: config yang for security-firewall-dpi
+ The Vyatta configuration YANG for security-firewall-dpi
+
+Package: vyatta-dpi-application-names-v1-yang
+Architecture: all
+Section: contrib/admin
+Depends: ${misc:Depends},
+ ${yang:Depends},
+Description: application name yang definitions
+ The Vyatta DPI application name YANG definitions
+
+Package: vyatta-dpi-application-types-v1-yang
+Architecture: all
+Section: contrib/admin
+Depends: ${misc:Depends},
+ ${yang:Depends},
+Description: application type yang definitions
+ The Vyatta DPI application type YANG definitions
+
+Package: vyatta-show-application-v1-yang
+Architecture: all
+Section: contrib/admin
+Depends: ${misc:Depends},
+ ${yang:Depends},
+ vyatta-opd (>= 1.1)
+Description: operational CLI yang for security-firewall-dpi
+ The Vyatta operational YANG for security-firewall-dpi
+
+Package: vyatta-op-system-session-dpi-v1-yang
+Architecture: all
+Section: contrib/admin
+Depends: ${misc:Depends},
+ ${yang:Depends},
+ vyatta-opd (>= 1.1), vplane-config-npf
+Description: operational CLI yang for DPI associated with a session
+ The Vyatta operational YANG for DPI associated with a session
+
+Package: vyatta-dpi-user-v1-yang
+Architecture: all
+Section: contrib/admin
+Depends: ${misc:Depends},
+ ${yang:Depends}
+Description: config yang for user-defined DPI
+ The Vyatta configuration YANG for user-defined DPI

@@ -1,0 +1,3 @@
+yang/vyatta-security-application-v1.yang usr/share/configd/yang
+
+scripts/end-app-fw-ruleset opt/vyatta/sbin

@@ -1,0 +1,5 @@
+vyatta-service-dpi (2.11) unstable; urgency=medium
+
+  * DANOS Import master
+
+ -- Vyatta Package Maintainers <DL-vyatta-help@att.com>  Wed, 13 May 2020 10:09:03 +0100

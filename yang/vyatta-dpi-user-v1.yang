@@ -1,0 +1,200 @@
+module vyatta-dpi-user-v1 {
+	namespace "urn:vyatta.com:mgmt:vyatta-dpi-user:1";
+	prefix vyatta-dpi-user-v1;
+
+	import configd-v1 {
+		prefix configd;
+	}
+	import vyatta-policy-v1 {
+		prefix policy;
+	}
+	import vyatta-policy-route-v1 {
+		prefix policy-route;
+	}
+	import vyatta-policy-pbr-dpi-v1 {
+		prefix pbr-dpi;
+	}
+	import vyatta-policy-pbr-v1 {
+		prefix pbr;
+	}
+	import vyatta-policy-qos-v1 {
+		prefix policy-qos;
+	}
+	import vyatta-policy-qos-dpi-v1 {
+		prefix policy-qos-dpi;
+	}
+	import vyatta-security-v1 {
+		prefix security;
+	}
+	import vyatta-security-firewall-v1 {
+		prefix security-firewall;
+	}
+	import vyatta-security-firewall-dpi-v1 {
+		prefix security-firewall-dpi;
+	}
+	import vyatta-security-application-v1 {
+		prefix security-app;
+	}
+	import vyatta-services-v1 {
+		prefix service;
+	}
+	import vyatta-service-application-v1 {
+		prefix service-app;
+	}
+
+	organization "AT&T Inc.";
+	contact
+		"AT&T
+		 Postal: 208 S. Akard Street
+		         Dallas, TX 75202, USA
+		 Web: www.att.com";
+
+	description
+		"Copyright (c) 2020, AT&T Intellectual Property.
+		 All rights reserved.
+
+		 Redistribution and use in source and binary forms,
+		 with or without modification, are permitted provided
+		 that the following conditions are met:
+
+		 1. Redistributions of source code must retain the
+		    above copyright notice, this list of conditions and
+		    the following disclaimer.
+		 2. Redistributions in binary form must reproduce
+		    the above copyright notice, this list of conditions
+		    and the following disclaimer in the documentation
+		    and/or other materials provided with the distribution.
+		 3. Neither the name of the copyright holder nor the
+		    names of its contributors may be used to endorse or
+		    promote products derived from this software without
+		    specific prior written permission.
+
+		 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS
+		 AND CONTRIBUTORS 'AS IS' AND ANY EXPRESS OR IMPLIED
+		 WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+		 WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+		 PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
+		 THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+		 ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
+		 OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+		 TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
+		 OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+		 HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+		 IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+		 NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+		 USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
+		 OF SUCH DAMAGE.
+
+		 SPDX-License-Identifier: BSD-3-Clause
+
+		 YANG module for adding user-defined DPI functionality.";
+
+	revision 2020-05-12 {
+		description "Initial revision.";
+	}
+
+	grouping user-application-name {
+		leaf name {
+			description  "Specify a user-defined application name";
+			configd:help "Specify a user-defined application name";
+				type leafref {
+					configd:help "User-defined application name";
+					path "/service:service/" +
+						"service-app:application/" +
+						"service-app:rule/" +
+						"service-app:then/" +
+						"service-app:name";
+				}
+		}
+	}
+
+	grouping user-application-type {
+		leaf type {
+			description  "Specify a user-defined application type";
+			configd:help "Specify a user-defined application type";
+				type leafref {
+					configd:help "User-defined application type";
+					path "/service:service/" +
+						"service-app:application/" +
+						"service-app:rule/" +
+						"service-app:then/" +
+						"service-app:type/" +
+						"service-app:type-value";
+				}
+		}
+	}
+
+	augment "/policy:policy/policy-route:route/pbr:pbr/pbr:rule/" +
+		"pbr-dpi:application/pbr-dpi:engine" {
+		description "Add user-defined DPI functionality to PBR rule";
+		container user {
+			description  "Use the user-defined DPI " +
+				"application engine";
+			configd:help "Use the user-defined DPI " +
+				"application engine";
+			presence "User application rule configuration";
+			must "count(name|type) = 1" {
+				error-message "Specify exactly one of 'name' or 'type'";
+			}
+			uses user-application-name;
+			uses user-application-type;
+		}
+	}
+
+	augment "/policy:policy/policy-qos:qos/policy-qos:name/" +
+		"policy-qos:shaper/policy-qos:class/policy-qos:match/" +
+		"policy-qos-dpi:application/policy-qos-dpi:engine" {
+		description "Add user-defined DPI functionality to QoS rule";
+		container user {
+			description  "Use the user-defined DPI " +
+				"application engine";
+			configd:help "Use the user-defined DPI " +
+				"application engine";
+			presence "User application rule configuration";
+			must "count(name|type) = 1" {
+				error-message "Specify exactly one of 'name' or 'type'";
+			}
+			uses user-application-name;
+			uses user-application-type;
+		}
+	}
+
+	augment "/security:security/security-firewall:firewall/" +
+		"security-firewall:name/security-firewall:rule/" +
+		"security-firewall:session/security-firewall-dpi:application/" +
+		"security-firewall-dpi:engine" {
+		description "Add user-defined DPI functionality to " +
+			"firewall rule";
+		container user {
+			description  "Use the user-defined DPI " +
+				"application engine";
+			configd:help "Use the user-defined DPI " +
+				"application engine";
+			presence "User application rule configuration";
+			must "count(name|type) = 1" {
+				error-message "Specify exactly one of 'name' or 'type'";
+			}
+			uses user-application-name;
+			uses user-application-type;
+		}
+	}
+
+	augment "/security:security/security-app:application/" +
+		"security-app:firewall/security-app:name/security-app:rule/" +
+		"security-app:engine" {
+		description "Add user-defined DPI functionality " +
+			"to security application";
+		container user {
+			description  "Use the user-defined DPI " +
+				"application engine";
+			configd:help "Use the user-defined DPI " +
+				"application engine";
+			presence "User application rule configuration";
+			must "count(name|type) = 1" {
+				error-message "Specify exactly one of 'name' or 'type'";
+			}
+			uses user-application-name;
+			uses user-application-type;
+		}
+	}
+}

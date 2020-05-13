@@ -1,0 +1,3 @@
+yang/vyatta-dpi-v1.yang usr/share/configd/yang
+scripts/3000-vyatta-service-dpi opt/vyatta/share/vyatta-op/functions/tech-support.d
+scripts/user-application.pl opt/vyatta/sbin

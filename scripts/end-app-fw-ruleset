@@ -1,0 +1,6 @@
+#!/bin/bash
+
+if [ "$COMMIT_ACTION" != "DELETE" ]
+then
+    vyatta-dp-npf.pl --variant=app-firewall --cmd=update --group="$1"
+fi

@@ -1,0 +1,86 @@
+module vyatta-policy-pbr-dpi-v1 {
+	namespace "urn:vyatta.com:mgmt:vyatta-policy-pbr-dpi:1";
+	prefix vyatta-policy-pbr-dpi-v1;
+
+	import vyatta-policy-v1 {
+		prefix policy;
+	}
+	import vyatta-policy-route-v1 {
+		prefix policy-route;
+	}
+	import vyatta-policy-pbr-v1 {
+		prefix pbr;
+	}
+	import vyatta-dpi-v1 {
+		prefix dpi;
+	}
+
+	organization "AT&T Inc.";
+	contact
+		"AT&T
+		 Postal: 208 S. Akard Street
+		         Dallas, TX 75202, USA
+		 Web: www.att.com";
+
+	description
+		"Copyright (c) 2019, AT&T Intellectual Property.
+		 All rights reserved.
+
+		 Copyright (c) 2016 by Brocade Communications Systems, Inc.
+		 All rights reserved.
+
+		 Redistribution and use in source and binary forms,
+		 with or without modification, are permitted provided
+		 that the following conditions are met:
+
+		 1. Redistributions of source code must retain the
+		    above copyright notice, this list of conditions and
+		    the following disclaimer.
+		 2. Redistributions in binary form must reproduce
+		    the above copyright notice, this list of conditions
+		    and the following disclaimer in the documentation
+		    and/or other materials provided with the distribution.
+		 3. Neither the name of the copyright holder nor the
+		    names of its contributors may be used to endorse or
+		    promote products derived from this software without
+		    specific prior written permission.
+
+		 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS
+		 AND CONTRIBUTORS 'AS IS' AND ANY EXPRESS OR IMPLIED
+		 WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+		 WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+		 PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
+		 THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+		 ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
+		 OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+		 TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
+		 OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+		 HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+		 IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+		 NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+		 USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
+		 OF SUCH DAMAGE.
+
+		 SPDX-License-Identifier: BSD-3-Clause
+
+		 YANG module for PBR DPI.";
+
+	revision 2019-12-11 {
+		description "Added BSD-3-Clause license.";
+	}
+	revision 2017-06-07 {
+		description "Change PBR to use new dpi:dpi-relaxed,
+			     and remove extraneous configd-v1 import.";
+	}
+	revision 2017-03-31 {
+		description "Relaxed application name validation.";
+	}
+	revision 2016-07-14 {
+		description "Initial revision.";
+	}
+
+	augment /policy:policy/policy-route:route/pbr:pbr/pbr:rule {
+		description "Add DPI functionality to PBR rule";
+		uses dpi:dpi-relaxed;
+	}
+}

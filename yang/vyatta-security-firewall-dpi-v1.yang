@@ -1,0 +1,121 @@
+module vyatta-security-firewall-dpi-v1 {
+	namespace "urn:vyatta.com:mgmt:vyatta-security-firewall-dpi:1";
+	prefix vyatta-security-firewall-dpi-v1;
+
+	import vyatta-security-v1 {
+		prefix security;
+	}
+	import vyatta-security-firewall-v1 {
+		prefix fw;
+	}
+	import vyatta-security-application-v1 {
+		prefix app;
+	}
+	import vyatta-dpi-v1 {
+		prefix dpi;
+	}
+	import configd-v1 {
+		prefix configd;
+	}
+
+	organization "AT&T Inc.";
+	contact
+		"AT&T
+		 Postal: 208 S. Akard Street
+		         Dallas, TX 75202, USA
+		 Web: www.att.com";
+
+	description
+		"Copyright (c) 2017,2019-2020, AT&T Intellectual Property.
+		 All rights reserved.
+
+		 Copyright (c) 2017 by Brocade Communications Systems, Inc.
+		 All rights reserved.
+
+		 Redistribution and use in source and binary forms,
+		 with or without modification, are permitted provided
+		 that the following conditions are met:
+
+		 1. Redistributions of source code must retain the
+		    above copyright notice, this list of conditions and
+		    the following disclaimer.
+		 2. Redistributions in binary form must reproduce
+		    the above copyright notice, this list of conditions
+		    and the following disclaimer in the documentation
+		    and/or other materials provided with the distribution.
+		 3. Neither the name of the copyright holder nor the
+		    names of its contributors may be used to endorse or
+		    promote products derived from this software without
+		    specific prior written permission.
+
+		 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS
+		 AND CONTRIBUTORS 'AS IS' AND ANY EXPRESS OR IMPLIED
+		 WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+		 WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+		 PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
+		 THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+		 ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
+		 OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+		 TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
+		 OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+		 HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+		 IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+		 NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+		 USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
+		 OF SUCH DAMAGE.
+
+		 SPDX-License-Identifier: BSD-3-Clause
+
+		 YANG module for firewall DPI.";
+
+	revision 2020-05-12 {
+		description "Corrected contact address.
+			     Added BSD-3-Clause license.
+			     Add engine node.
+			     Removed vyatta-dpi-status.";
+	}
+	revision 2019-04-11 {
+		description "Added vyatta-dpi-status";
+	}
+	revision 2017-10-25 {
+		description "Use presence containers instead of not(*) in
+			     must statements.";
+	}
+	revision 2017-03-06 {
+		description "Initial revision.";
+	}
+
+	grouping dpi-firewall {
+		leaf firewall {
+			description "Application firewall";
+			configd:help "Application firewall";
+			type leafref {
+				configd:help "Application firewall name";
+				path "/security:security/app:application/app:firewall/app:name/app:ruleset-name";
+			}
+		}
+	}
+
+	augment /security:security/fw:firewall/fw:name/fw:rule/fw:session {
+		description "Add DPI functionality to firewall rule";
+		container application {
+			presence "Firewall session rule DPI application configuration";
+			must "count(engine|firewall) = 1" {
+				error-message "Specify exactly one of 'firewall' and 'engine'";
+			}
+			must "not(../../fw:protocol) or " +
+			     "(../../fw:protocol = 'tcp') or (../../fw:protocol = 6) or " +
+			     "(../../fw:protocol = 'udp') or (../../fw:protocol = 17)" {
+				error-message "Application matching is only supported for UDP and TCP protocols";
+			}
+			description "Specify applications to match.
+				     They can be specified by firewall rules, name, protocol, or type";
+			configd:help "Match applications";
+			uses dpi:dpi-name;
+			uses dpi:dpi-protocol;
+			uses dpi:dpi-type-leaf;
+			uses dpi:dpi-engine;
+			uses dpi-firewall;
+		}
+	}
+}

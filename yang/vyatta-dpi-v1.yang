@@ -1,0 +1,226 @@
+module vyatta-dpi-v1 {
+	namespace "urn:vyatta.com:mgmt:vyatta-dpi:1";
+	prefix vyatta-dpi-v1;
+
+	import configd-v1 {
+		prefix configd;
+	}
+
+	import vyatta-dpi-application-names-v1 {
+		prefix app-names;
+	}
+
+	import vyatta-dpi-application-types-v1 {
+		prefix app-types;
+	}
+
+	organization "AT&T Inc.";
+	contact	"AT&T
+		 Postal: 208 S. Akard Street
+		         Dallas, TX 75202, USA
+		 Web: www.att.com";
+
+	description
+		"Copyright (c) 2017-2020, AT&T Intellectual Property.
+		 All rights reserved.
+
+		 Copyright (c) 2016-2017 by Brocade Communications Systems, Inc.
+		 All rights reserved.
+
+		 Redistribution and use in source and binary forms,
+		 with or without modification, are permitted provided
+		 that the following conditions are met:
+
+		 1. Redistributions of source code must retain the
+		    above copyright notice, this list of conditions and
+		    the following disclaimer.
+		 2. Redistributions in binary form must reproduce
+		    the above copyright notice, this list of conditions
+		    and the following disclaimer in the documentation
+		    and/or other materials provided with the distribution.
+		 3. Neither the name of the copyright holder nor the
+		    names of its contributors may be used to endorse or
+		    promote products derived from this software without
+		    specific prior written permission.
+
+		 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS
+		 AND CONTRIBUTORS 'AS IS' AND ANY EXPRESS OR IMPLIED
+		 WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+		 WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+		 PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
+		 THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+		 ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
+		 OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+		 TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
+		 OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+		 HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+		 IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+		 NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+		 USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
+		 OF SUCH DAMAGE.
+
+		 SPDX-License-Identifier: BSD-3-Clause
+
+		 YANG module for Deep Packet Inspection (DPI)";
+
+	revision 2020-05-12 {
+		description "Corrected contact address.
+			     Added BSD-3-Clause license.
+			     Added DPI engine node;
+			     obsoleted name and type.
+			     Removed vyatta-dpi-status.";
+	}
+	revision 2019-04-11 {
+		description "Added vyatta-dpi-status";
+	}
+	revision 2018-01-30 {
+		description "Allow appname and relaxed-appname to accept
+			     user-defined applications";
+	}
+	revision 2017-10-25 {
+		description "Populate application names and types from yang.
+			     Added appname, relaxed-appname, and apptype typedefs
+			     Use presence containers instead of not(*) in
+			     must statements.";
+	}
+	revision 2017-05-01 {
+		description "Move configd:validate to configd:syntax for improved UX.
+			     Add dpi-name-relaxed and dpi-relaxed.";
+	}
+	revision 2017-03-03 {
+		description "Make groupings for name and type (leaf) and add
+			     protocol and type (list) groupings.";
+	}
+	revision 2016-07-14 {
+		description "Initial revision.";
+	}
+
+	typedef appname {
+		type union {
+			type string {
+				configd:syntax "dpi --validate-app-name $VAR(@) || user-application.pl --value $VAR(@)";
+			}
+			type app-names:application-names;
+		}
+	}
+
+	typedef relaxed-appname {
+		type union {
+			type string {
+				configd:syntax "dpi --relax --validate-app-name $VAR(@) || user-application.pl --value $VAR(@)";
+			}
+			type app-names:application-names;
+			type app-names:relaxed-application-names;
+		}
+	}
+
+	typedef apptype {
+		type union {
+			type string {
+				configd:syntax "dpi --validate-app-type $VAR(@)";
+			}
+			type app-types:application-types;
+		}
+	}
+
+	/* Strict application name.
+	 */
+	grouping dpi-name {
+		list name {
+			description "Specify an application by name";
+			configd:help "Match by application name";
+			max-elements 1;
+			status obsolete;
+
+			key name;
+			leaf name {
+				type appname;
+			}
+		}
+	}
+
+	/* Relaxed application name for PBR backwards compatibility.
+	 */
+	grouping dpi-name-relaxed {
+		list name {
+			description "Specify an application by name";
+			configd:help "Match by application name";
+			max-elements 1;
+			status obsolete;
+
+			key name;
+			leaf name {
+				type relaxed-appname;
+			}
+		}
+	}
+
+	grouping dpi-protocol {
+		list protocol {
+			description "Specify an application by protocol";
+			configd:help "Match by application protocol";
+			max-elements 1;
+			status obsolete;
+
+			key protocol;
+			leaf protocol {
+				type appname;
+			}
+		}
+	}
+
+	grouping dpi-type-leaf {
+		leaf type {
+			description "Specify an application by type";
+			configd:help "Match by application type";
+			status obsolete;
+			type apptype;
+		}
+	}
+
+	grouping dpi-type {
+		list type {
+			description "Specify an application by type";
+			configd:help "Match by application type";
+			max-elements 1;
+			status obsolete;
+
+			key type;
+			leaf type {
+				type apptype;
+			}
+		}
+	}
+
+	grouping dpi-engine {
+		container engine {
+			description "Specify which DPI engine to use";
+			configd:help "Match applications by DPI engine";
+			must "count(*) < 2" {
+				error-message "Specify only one DPI engine";
+			}
+		}
+	}
+
+	grouping dpi {
+		container application {
+			description
+				"Specify applications to match.";
+			configd:help "Match applications";
+			uses dpi-name;
+			uses dpi-type-leaf;
+			uses dpi-engine;
+		}
+	}
+
+	grouping dpi-relaxed {
+		container application {
+			description
+				"Specify applications to match.";
+			configd:help "Match applications";
+			uses dpi-name-relaxed;
+			uses dpi-type-leaf;
+			uses dpi-engine;
+		}
+	}
+}

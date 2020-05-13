@@ -1,0 +1,265 @@
+module vyatta-dpi-application-types-v1 {
+	namespace "urn:vyatta.com:mgmt:vyatta-dpi-application-types:1";
+	prefix vyatta-dpi-application-types-v1;
+
+	import vyatta-opd-extensions-v1 {
+		prefix opd;
+	}
+
+	organization "AT&T Inc.";
+	contact	"AT&T
+		 Postal: 208 S. Akard Street
+		         Dallas, TX 75202, USA
+		 Web: www.att.com";
+
+	description
+		"Copyright (c) 2017,2019-2020 AT&T Intellectual Property
+		 All rights reserved.
+
+		 Redistribution and use in source and binary forms,
+		 with or without modification, are permitted provided
+		 that the following conditions are met:
+
+		 1. Redistributions of source code must retain the
+		    above copyright notice, this list of conditions and
+		    the following disclaimer.
+		 2. Redistributions in binary form must reproduce
+		    the above copyright notice, this list of conditions
+		    and the following disclaimer in the documentation
+		    and/or other materials provided with the distribution.
+		 3. Neither the name of the copyright holder nor the
+		    names of its contributors may be used to endorse or
+		    promote products derived from this software without
+		    specific prior written permission.
+
+		 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS
+		 AND CONTRIBUTORS 'AS IS' AND ANY EXPRESS OR IMPLIED
+		 WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+		 WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+		 PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
+		 THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+		 ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
+		 OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+		 TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
+		 OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+		 HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+		 IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+		 NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+		 USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
+		 OF SUCH DAMAGE.
+
+		 SPDX-License-Identifier: BSD-3-Clause
+
+		 DPI application types";
+
+	revision 2020-05-12 {
+		description "Obsoleted application-types and all the enum values.";
+	}
+	revision 2019-12-11 {
+		description "Corrected contact address.
+			     Added BSD-3-Clause license.";
+	}
+	revision 2017-09-01 {
+		description "Initial version";
+	}
+
+	typedef application-types {
+		status obsolete;
+		type enumeration {
+			enum "audio_chat" {
+				opd:help "Audio Chat";
+				status obsolete;
+			}
+
+			enum "anonymizer" {
+				opd:help "Anonymizers and Proxies";
+				status obsolete;
+			}
+
+			enum "remote_access" {
+				opd:help "Remote access";
+				status obsolete;
+			}
+
+			enum "chat" {
+				opd:help "Chat";
+				status obsolete;
+			}
+
+			enum "vpn_tun" {
+				opd:help "VPN / Tunnels";
+				status obsolete;
+			}
+
+			enum "update" {
+				opd:help "Software Update";
+				status obsolete;
+			}
+
+			enum "analytics" {
+				opd:help "Analytics and Statistics";
+				status obsolete;
+			}
+
+			enum "web" {
+				opd:help "Web";
+				status obsolete;
+			}
+
+			enum "webmail" {
+				opd:help "Webmails";
+				status obsolete;
+			}
+
+			enum "news_portal" {
+				opd:help "News Portal";
+				status obsolete;
+			}
+
+			enum "adult_content" {
+				opd:help "Adult Content";
+				status obsolete;
+			}
+
+			enum "gaming" {
+				opd:help "Gaming";
+				status obsolete;
+			}
+
+			enum "web_search" {
+				opd:help "Web - Search engines";
+				status obsolete;
+			}
+
+			enum "networking" {
+				opd:help "Networking";
+				status obsolete;
+			}
+
+			enum "basic" {
+				opd:help "Basic";
+				status obsolete;
+			}
+
+			enum "email" {
+				opd:help "Email";
+				status obsolete;
+			}
+
+			enum "db" {
+				opd:help "Database";
+				status obsolete;
+			}
+
+			enum "iot" {
+				opd:help "Internet Of Things";
+				status obsolete;
+			}
+
+			enum "scada" {
+				opd:help "SCADA";
+				status obsolete;
+			}
+
+			enum "aaa" {
+				opd:help "AAA";
+				status obsolete;
+			}
+
+			enum "blog" {
+				opd:help "Blog";
+				status obsolete;
+			}
+
+			enum "video_chat" {
+				opd:help "Video chat";
+				status obsolete;
+			}
+
+			enum "social_network" {
+				opd:help "Social Networks";
+				status obsolete;
+			}
+
+			enum "im_mc" {
+				opd:help "Instant Messaging & Multimedia Conferencing";
+				status obsolete;
+			}
+
+			enum "voip" {
+				opd:help "VoIP";
+				status obsolete;
+			}
+
+			enum "file_mngt" {
+				opd:help "File Management";
+				status obsolete;
+			}
+
+			enum "web_sites" {
+				opd:help "Web - Websites";
+				status obsolete;
+			}
+
+			enum "cdn" {
+				opd:help "CDN";
+				status obsolete;
+			}
+
+			enum "web_ecom" {
+				opd:help "Web - E-commerce";
+				status obsolete;
+			}
+
+			enum "p2p" {
+				opd:help "Peer to peer";
+				status obsolete;
+			}
+
+			enum "file_transfer" {
+				opd:help "File transfer";
+				status obsolete;
+			}
+
+			enum "mm_streaming" {
+				opd:help "Multimedia streaming";
+				status obsolete;
+			}
+
+			enum "forum" {
+				opd:help "Forum";
+				status obsolete;
+			}
+
+			enum "classified_ads" {
+				opd:help "Classified Ads";
+				status obsolete;
+			}
+
+			enum "enterprise" {
+				opd:help "Enterprise";
+				status obsolete;
+			}
+
+			enum "mobile" {
+				opd:help "Mobile";
+				status obsolete;
+			}
+
+			enum "standardized" {
+				opd:help "Standards Based";
+				status obsolete;
+			}
+
+			enum "cloud_services" {
+				opd:help "Cloud Based Services";
+				status obsolete;
+			}
+
+			enum "advertising" {
+				opd:help "Advertising";
+				status obsolete;
+			}
+		}
+	}
+}
