@@ -68,10 +68,9 @@ module vyatta-security-firewall-dpi-v1 {
 
 		 YANG module for firewall DPI.";
 
-	revision 2020-05-12 {
+	revision 2020-07-12 {
 		description "Corrected contact address.
 			     Added BSD-3-Clause license.
-			     Add engine node.
 			     Removed vyatta-dpi-status.";
 	}
 	revision 2019-04-11 {
@@ -99,11 +98,7 @@ module vyatta-security-firewall-dpi-v1 {
 	augment /security:security/fw:firewall/fw:name/fw:rule/fw:session {
 		description "Add DPI functionality to firewall rule";
 		container application {
-			presence "Firewall session rule DPI application configuration";
-			must "count(engine|firewall) = 1" {
-				error-message "Specify exactly one of 'firewall' and 'engine'";
-			}
-			must "not(../../fw:protocol) or " +
+			must "not (../application) or " +
 			     "(../../fw:protocol = 'tcp') or (../../fw:protocol = 6) or " +
 			     "(../../fw:protocol = 'udp') or (../../fw:protocol = 17)" {
 				error-message "Application matching is only supported for UDP and TCP protocols";
@@ -111,10 +106,11 @@ module vyatta-security-firewall-dpi-v1 {
 			description "Specify applications to match.
 				     They can be specified by firewall rules, name, protocol, or type";
 			configd:help "Match applications";
+			// NB dpi:dpi-name, dpi:dpi-protocol, and dpi:dpi-type-leaf are all obsolete.
+			//    They are retained here for backwards compatibility.
 			uses dpi:dpi-name;
 			uses dpi:dpi-protocol;
 			uses dpi:dpi-type-leaf;
-			uses dpi:dpi-engine;
 			uses dpi-firewall;
 		}
 	}
