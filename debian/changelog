@@ -1,3 +1,9 @@
+vyatta-service-dpi (2.12) unstable; urgency=medium
+
+  * Only allow DPI matching with "application firewall"
+
+ -- Paul Aitken <paul.aitken@att.com>  Mon, 03 Aug 2020 11:37:04 +0100
+
 vyatta-service-dpi (2.11) unstable; urgency=medium
 
   * DANOS Import master
