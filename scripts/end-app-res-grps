@@ -1,0 +1,142 @@
+#!/usr/bin/python3
+
+# Copyright (c) 2020, AT&T Intellectual Property.  All rights reserved.
+
+import sys
+
+from vyatta import configd
+from vyatta.npf.npf_debug import NpfDebug
+from vyatta.npf.npf_store import store_cfg
+
+CONFIG_CANDIDATE = configd.Client.CANDIDATE
+CONFIG_RUNNING = configd.Client.RUNNING
+
+APP_GRP_CMD = "resources group application-group"
+
+dbg = NpfDebug()
+
+
+def get_configs(client, path):
+    try:
+        status = client.node_get_status(CONFIG_CANDIDATE, path)
+
+        if status == client.UNCHANGED:
+            dbg.pprint("unchanged: {} so no work to do".
+                       format(path))
+            return {}, {}
+
+        c_cfg = client.tree_get_dict(path, CONFIG_CANDIDATE)
+    except configd.Exception:
+        dbg.pprint("there is no configuration under {}".
+                   format(path))
+        c_cfg = {}
+
+    try:
+        r_cfg = client.tree_get_dict(path, CONFIG_RUNNING)
+    except configd.Exception:
+        dbg.pprint("failed getting running tree for {}".
+                   format(path))
+        r_cfg = {}
+
+    return c_cfg, r_cfg
+
+
+def build_cfg_str(group):
+    # Build string:
+    #
+    # name engine:name,...;engine:proto,...;engine:type,...
+    #
+    name = group["group-name"]
+    name_arg = []
+    proto_arg = []
+    type_arg = []
+
+    for engine, v in group["engine"].items():
+        if "name" in v:
+            name_arg.extend([":".join([engine,
+                            name["name"]]) for name in v["name"]])
+        if "proto" in v:
+            proto_arg.extend([":".join([engine,
+                             proto["proto"]]) for proto in v["proto"]])
+        if "type" in v:
+            type_arg.extend([":".join([engine,
+                            type["type"]]) for type in v["type"]])
+
+    # Join the name_arg values into a comma-separated list.
+    # Join the proto_arg values into a comma-separated list.
+    # Join the type_arg values into a comma-separated list.
+    #
+    # Finally, join these three lists into a semi-colon separated list
+    # prefixed with the group name:
+    #
+    # name engine:name,...;engine:proto,...;engine:type,...
+    #
+    return name + " " + ";".join([",".join(name_arg),
+                                  ",".join(proto_arg),
+                                  ",".join(type_arg)])
+
+
+def add_group(group):
+    if not group.get("engine"):
+        print("group {} has no engines".format(group["group-name"]))
+        return
+
+    cfg_str = build_cfg_str(group)
+    store_cfg(APP_GRP_CMD,
+              "npf-cfg app-grp add {}".format(cfg_str),
+              "SET",
+              dbg)
+
+
+def del_group(group):
+    store_cfg(APP_GRP_CMD,
+              "npf-cfg app-grp del {}".format(group["group-name"]),
+              "DELETE",
+              dbg)
+
+
+def run():
+    client = None
+    try:
+        client = configd.Client()
+    except Exception as e:
+        print("failed to establish client session: {}".format(e),
+              file=sys.stderr)
+        sys.exit(1)
+
+    new, old = get_configs(client, APP_GRP_CMD)
+
+    if new == {} and old == {}:
+        # Unchanged so nothing to do.
+        return
+
+    if "application-group" in new:
+        new = new["application-group"]
+    else:
+        new = []
+
+    if "application-group" in old:
+        old = old["application-group"]
+    else:
+        old = []
+
+    old_names = {grp["group-name"]: grp for grp in old}
+    new_names = {grp["group-name"]: grp for grp in new}
+
+    for group in old:
+        if group["group-name"] not in new_names:
+            # Deleted group
+            del_group(group)
+        else:
+            # Updated group
+            if (group != new_names[group["group-name"]]):
+                add_group(new_names[group["group-name"]])
+
+    for group in new:
+        if group["group-name"] not in old_names:
+            # New group
+            add_group(group)
+
+
+if __name__ == "__main__":
+    run()

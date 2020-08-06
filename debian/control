@@ -5,6 +5,8 @@ Maintainer: Vyatta Package Maintainers <DL-vyatta-help@att.com>
 Build-Depends: debhelper (>= 9),
  dh-yang,
  pkg-config,
+ dh-python,
+X-Python3-Version: >= 3.4
 Standards-Version: 3.9.8
 
 Package: vyatta-dpi-v1-yang
@@ -104,3 +106,12 @@ Depends: ${misc:Depends},
  ${yang:Depends}
 Description: config yang for user-defined DPI
  The Vyatta configuration YANG for user-defined DPI
+
+Package: vyatta-resource-group-application-v1-yang
+Architecture: all
+Section: contrib/admin
+Depends: ${misc:Depends},
+ ${yang:Depends},
+ python3
+Description: config yang for application groups
+ The Vyatta configuration YANG for application groups

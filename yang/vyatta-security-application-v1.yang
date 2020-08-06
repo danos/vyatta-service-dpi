@@ -17,6 +17,9 @@ module vyatta-security-application-v1 {
 	import configd-v1 {
 		prefix configd;
 	}
+	import vyatta-resource-group-application-v1 {
+		prefix res-grp-app;
+	}
 
 	organization "AT&T Inc.";
 	contact
@@ -68,6 +71,9 @@ module vyatta-security-application-v1 {
 
 		 YANG module for DPI under security application.";
 
+	revision 2020-08-06 {
+		description "Add user DPI to application-groups.";
+	}
 	revision 2020-05-12 {
 		description "Corrected contact address.
 			     Added BSD-3-Clause license.
@@ -92,6 +98,7 @@ module vyatta-security-application-v1 {
 		uses dpi:dpi-name;
 		uses dpi:dpi-type;
 		uses dpi:dpi-engine;
+		uses res-grp-app:app-group;
 	}
 
 	augment /security:security {
@@ -142,6 +149,9 @@ module vyatta-security-application-v1 {
 						key "rule-number";
 						leaf "rule-number" {
 							type fw-types:rule-number;
+						}
+						must "(count(group|engine) <= 1)" {
+							error-message "Cannot specify both 'engine' and 'group'";
 						}
 						uses rule-app-fw;
 					}
