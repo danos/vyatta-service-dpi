@@ -5,24 +5,6 @@ module vyatta-ndpi-v1 {
 	import configd-v1 {
 		prefix configd;
 	}
-	import vyatta-policy-v1 {
-		prefix policy;
-	}
-	import vyatta-policy-route-v1 {
-		prefix policy-route;
-	}
-	import vyatta-policy-pbr-dpi-v1 {
-		prefix pbr-dpi;
-	}
-	import vyatta-policy-pbr-v1 {
-		prefix pbr;
-	}
-	import vyatta-policy-qos-v1 {
-		prefix policy-qos;
-	}
-	import vyatta-policy-qos-dpi-v1 {
-		prefix policy-qos-dpi;
-	}
 	import vyatta-security-v1 {
 		prefix security;
 	}
@@ -84,7 +66,7 @@ module vyatta-ndpi-v1 {
 		 YANG module for nDPI.
 		 Adds engine nodes to QoS, PBR, Firewall and App-Firewall.";
 
-	revision 2020-07-12 {
+	revision 2020-08-06 {
 		description "Initial revision";
 	}
 
@@ -101,37 +83,6 @@ module vyatta-ndpi-v1 {
 			description  "Specify an nDPI application type";
 			configd:help "Specify an nDPI application type";
 			type ndpi-app-types:application-types;
-		}
-	}
-
-	augment "/policy:policy/policy-route:route/pbr:pbr/pbr:rule/" +
-		"pbr-dpi:application/pbr-dpi:engine" {
-		description "Add nDPI functionality to PBR rule";
-		container ndpi {
-			description  "Use the nDPI application engine";
-			configd:help "Use the nDPI application engine";
-			presence "nDPI application rule configuration";
-			must "count(name|type) = 1" {
-				error-message "Specify exactly one of 'name' or 'type'";
-			}
-			uses ndpi-application-name;
-			uses ndpi-application-type;
-		}
-	}
-
-	augment "/policy:policy/policy-qos:qos/policy-qos:name/" +
-		"policy-qos:shaper/policy-qos:class/policy-qos:match/" +
-		"policy-qos-dpi:application/policy-qos-dpi:engine" {
-		description "Add nDPI functionality to QoS rule";
-		container ndpi {
-			description  "Use the nDPI application engine";
-			configd:help "Use the nDPI application engine";
-			presence "nDPI application rule configuration";
-			must "count(name|type) = 1" {
-				error-message "Specify exactly one of 'name' or 'type'";
-			}
-			uses ndpi-application-name;
-			uses ndpi-application-type;
 		}
 	}
 

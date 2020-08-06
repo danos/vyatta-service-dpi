@@ -63,10 +63,9 @@ module vyatta-dpi-v1 {
 
 		 YANG module for Deep Packet Inspection (DPI)";
 
-	revision 2020-05-12 {
+	revision 2020-08-06 {
 		description "Corrected contact address.
 			     Added BSD-3-Clause license.
-			     Added DPI engine node;
 			     obsoleted name and type.
 			     Removed vyatta-dpi-status.";
 	}
@@ -209,7 +208,6 @@ module vyatta-dpi-v1 {
 			configd:help "Match applications";
 			uses dpi-name;
 			uses dpi-type-leaf;
-			uses dpi-engine;
 		}
 	}
 
@@ -220,7 +218,6 @@ module vyatta-dpi-v1 {
 			configd:help "Match applications";
 			uses dpi-name-relaxed;
 			uses dpi-type-leaf;
-			uses dpi-engine;
 		}
 	}
 }

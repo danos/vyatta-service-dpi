@@ -5,24 +5,6 @@ module vyatta-dpi-user-v1 {
 	import configd-v1 {
 		prefix configd;
 	}
-	import vyatta-policy-v1 {
-		prefix policy;
-	}
-	import vyatta-policy-route-v1 {
-		prefix policy-route;
-	}
-	import vyatta-policy-pbr-dpi-v1 {
-		prefix pbr-dpi;
-	}
-	import vyatta-policy-pbr-v1 {
-		prefix pbr;
-	}
-	import vyatta-policy-qos-v1 {
-		prefix policy-qos;
-	}
-	import vyatta-policy-qos-dpi-v1 {
-		prefix policy-qos-dpi;
-	}
 	import vyatta-security-v1 {
 		prefix security;
 	}
@@ -83,7 +65,7 @@ module vyatta-dpi-user-v1 {
 
 		 YANG module for adding user-defined DPI functionality.";
 
-	revision 2020-07-12 {
+	revision 2020-08-06 {
 		description "Initial revision.";
 	}
 
@@ -115,41 +97,6 @@ module vyatta-dpi-user-v1 {
 						"service-app:type/" +
 						"service-app:type-value";
 				}
-		}
-	}
-
-	augment "/policy:policy/policy-route:route/pbr:pbr/pbr:rule/" +
-		"pbr-dpi:application/pbr-dpi:engine" {
-		description "Add user-defined DPI functionality to PBR rule";
-		container user {
-			description  "Use the user-defined DPI " +
-				"application engine";
-			configd:help "Use the user-defined DPI " +
-				"application engine";
-			presence "User application rule configuration";
-			must "count(name|type) = 1" {
-				error-message "Specify exactly one of 'name' or 'type'";
-			}
-			uses user-application-name;
-			uses user-application-type;
-		}
-	}
-
-	augment "/policy:policy/policy-qos:qos/policy-qos:name/" +
-		"policy-qos:shaper/policy-qos:class/policy-qos:match/" +
-		"policy-qos-dpi:application/policy-qos-dpi:engine" {
-		description "Add user-defined DPI functionality to QoS rule";
-		container user {
-			description  "Use the user-defined DPI " +
-				"application engine";
-			configd:help "Use the user-defined DPI " +
-				"application engine";
-			presence "User application rule configuration";
-			must "count(name|type) = 1" {
-				error-message "Specify exactly one of 'name' or 'type'";
-			}
-			uses user-application-name;
-			uses user-application-type;
 		}
 	}
 
