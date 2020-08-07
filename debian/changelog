@@ -1,3 +1,10 @@
+vyatta-service-dpi (2.13) unstable; urgency=medium
+
+  * Add application resource groups
+  * Don't add new "app engine" DPI CLI to PBR and QoS
+
+ -- Paul Aitken <paul.aitken@att.com>  Fri, 07 Aug 2020 13:52:31 +0100
+
 vyatta-service-dpi (2.12) unstable; urgency=medium
 
   * Only allow DPI matching with "application firewall"
