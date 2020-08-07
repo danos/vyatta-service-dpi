@@ -1,3 +1,9 @@
+vyatta-service-dpi (2.14) unstable; urgency=medium
+
+  * Add missing app RG install file
+
+ -- Paul Aitken <paul.aitken@att.com>  Fri, 07 Aug 2020 14:43:30 +0100
+
 vyatta-service-dpi (2.13) unstable; urgency=medium
 
   * Add application resource groups
