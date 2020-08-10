@@ -14,9 +14,17 @@ module vyatta-ndpi-v1 {
 	import vyatta-ndpi-application-names-v1 {
 		prefix ndpi-app-names;
 	}
-
 	import vyatta-ndpi-application-types-v1 {
 		prefix ndpi-app-types;
+	}
+	import vyatta-resources-v1 {
+		prefix resources;
+	}
+	import vyatta-resources-group-v1 {
+		prefix groups;
+	}
+	import vyatta-resource-group-application-v1 {
+		prefix res-grp-app;
 	}
 
 	organization "AT&T Inc.";
@@ -66,7 +74,7 @@ module vyatta-ndpi-v1 {
 		 YANG module for nDPI.
 		 Adds engine nodes to QoS, PBR, Firewall and App-Firewall.";
 
-	revision 2020-08-06 {
+	revision 2020-08-10 {
 		description "Initial revision";
 	}
 
@@ -99,6 +107,27 @@ module vyatta-ndpi-v1 {
 			}
 			uses ndpi-application-name;
 			uses ndpi-application-type;
+		}
+	}
+
+	augment "/resources:resources/groups:group/" +
+		"res-grp-app:application-group/res-grp-app:engine" {
+		description "Add nDPI functionality to resource groups";
+		container ndpi {
+			description  "Use the nDPI application engine";
+			configd:help "Use the nDPI application engine";
+			list name {
+				description  "Specify an nDPI application name";
+				configd:help "Specify an nDPI application name";
+				key "name";
+				uses ndpi-application-name;
+			}
+			list type {
+				description  "Specify an nDPI application type";
+				configd:help "Specify an nDPI application type";
+				key "type";
+				uses ndpi-application-type;
+			}
 		}
 	}
 }

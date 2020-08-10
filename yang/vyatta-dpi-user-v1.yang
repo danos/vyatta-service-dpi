@@ -17,6 +17,15 @@ module vyatta-dpi-user-v1 {
 	import vyatta-service-application-v1 {
 		prefix service-app;
 	}
+	import vyatta-resources-v1 {
+		prefix resources;
+	}
+	import vyatta-resources-group-v1 {
+		prefix groups;
+	}
+	import vyatta-resource-group-application-v1 {
+		prefix res-grp-app;
+	}
 
 	organization "AT&T Inc.";
 	contact
@@ -65,7 +74,7 @@ module vyatta-dpi-user-v1 {
 
 		 YANG module for adding user-defined DPI functionality.";
 
-	revision 2020-08-06 {
+	revision 2020-08-10 {
 		description "Initial revision.";
 	}
 
@@ -116,6 +125,28 @@ module vyatta-dpi-user-v1 {
 			}
 			uses user-application-name;
 			uses user-application-type;
+		}
+	}
+
+	augment "/resources:resources/groups:group/" +
+		"res-grp-app:application-group/res-grp-app:engine" {
+		description "Add user-defined DPI functionality
+                     to resource groups";
+		container user {
+			description  "Use the user-defined application engine";
+			configd:help "Use the user-defined application engine";
+			list name {
+				description  "Specify a user-defined application name";
+				configd:help "Specify a user-defined application name";
+				key "name";
+				uses user-application-name;
+			}
+			list type {
+				description  "Specify a user-defined application type";
+				configd:help "Specify a user-defined application type";
+				key "type";
+				uses user-application-type;
+			}
 		}
 	}
 }
