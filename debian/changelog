@@ -1,3 +1,9 @@
+vyatta-service-dpi (2.16) unstable; urgency=medium
+
+  * Add end-app-res-grps installer
+
+ -- Paul Aitken <paul.aitken@att.com>  Thu, 13 Aug 2020 20:27:01 +0100
+
 vyatta-service-dpi (2.15) unstable; urgency=medium
 
   * Add DPI engine nodes for application groups
