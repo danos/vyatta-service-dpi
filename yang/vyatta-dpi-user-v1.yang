@@ -74,7 +74,7 @@ module vyatta-dpi-user-v1 {
 
 		 YANG module for adding user-defined DPI functionality.";
 
-	revision 2020-08-10 {
+	revision 2020-08-20 {
 		description "Initial revision.";
 	}
 
@@ -109,6 +109,21 @@ module vyatta-dpi-user-v1 {
 		}
 	}
 
+	grouping user-application-protocol {
+		leaf protocol {
+			description  "Specify a user-defined application protocol";
+			configd:help "Specify a user-defined application protocol";
+			type leafref {
+				configd:help "User-defined application protocol";
+				path "/service:service/" +
+					"service-app:application/" +
+					"service-app:rule/" +
+					"service-app:then/" +
+					"service-app:protocol";
+			}
+		}
+	}
+
 	augment "/security:security/security-app:application/" +
 		"security-app:firewall/security-app:name/security-app:rule/" +
 		"security-app:engine" {
@@ -121,10 +136,11 @@ module vyatta-dpi-user-v1 {
 				"application engine";
 			presence "User application rule configuration";
 			must "count(name|type) = 1" {
-				error-message "Specify exactly one of 'name' or 'type'";
+				error-message "Specify exactly one of 'name', 'type', or 'protocol'";
 			}
 			uses user-application-name;
 			uses user-application-type;
+			uses user-application-protocol;
 		}
 	}
 
@@ -146,6 +162,12 @@ module vyatta-dpi-user-v1 {
 				configd:help "Specify a user-defined application type";
 				key "type";
 				uses user-application-type;
+			}
+			list protocol {
+				description  "Specify a user-defined application protocol";
+				configd:help "Specify a user-defined application protocol";
+				key "protocol";
+				uses user-application-protocol;
 			}
 		}
 	}

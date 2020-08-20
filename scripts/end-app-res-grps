@@ -55,9 +55,9 @@ def build_cfg_str(group):
         if "name" in v:
             name_arg.extend([":".join([engine,
                             name["name"]]) for name in v["name"]])
-        if "proto" in v:
+        if "protocol" in v:
             proto_arg.extend([":".join([engine,
-                             proto["proto"]]) for proto in v["proto"]])
+                             proto["protocol"]]) for proto in v["protocol"]])
         if "type" in v:
             type_arg.extend([":".join([engine,
                             type["type"]]) for type in v["type"]])
