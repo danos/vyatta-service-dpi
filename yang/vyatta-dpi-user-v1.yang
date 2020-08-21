@@ -82,14 +82,14 @@ module vyatta-dpi-user-v1 {
 		leaf name {
 			description  "Specify a user-defined application name";
 			configd:help "Specify a user-defined application name";
-				type leafref {
-					configd:help "User-defined application name";
-					path "/service:service/" +
-						"service-app:application/" +
-						"service-app:rule/" +
-						"service-app:then/" +
-						"service-app:name";
-				}
+			type leafref {
+				configd:help "User-defined application name";
+				path "/service:service/" +
+					"service-app:application/" +
+					"service-app:rule/" +
+					"service-app:then/" +
+					"service-app:name";
+			}
 		}
 	}
 
@@ -97,15 +97,15 @@ module vyatta-dpi-user-v1 {
 		leaf type {
 			description  "Specify a user-defined application type";
 			configd:help "Specify a user-defined application type";
-				type leafref {
-					configd:help "User-defined application type";
-					path "/service:service/" +
-						"service-app:application/" +
-						"service-app:rule/" +
-						"service-app:then/" +
-						"service-app:type/" +
-						"service-app:type-value";
-				}
+			type leafref {
+				configd:help "User-defined application type";
+				path "/service:service/" +
+					"service-app:application/" +
+					"service-app:rule/" +
+					"service-app:then/" +
+					"service-app:type/" +
+					"service-app:type-value";
+			}
 		}
 	}
 
