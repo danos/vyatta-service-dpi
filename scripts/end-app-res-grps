@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
-# Copyright (c) 2020, AT&T Intellectual Property.  All rights reserved.
+# Copyright (c) 2020-2021, AT&T Intellectual Property.
+# All rights reserved.
 
 import sys
 
@@ -82,14 +83,14 @@ def add_group(group):
         return
 
     cfg_str = build_cfg_str(group)
-    store_cfg(APP_GRP_CMD,
+    store_cfg("{} {}".format(APP_GRP_CMD, group["group-name"]),
               "npf-cfg app-grp add {}".format(cfg_str),
               "SET",
               dbg)
 
 
 def del_group(group):
-    store_cfg(APP_GRP_CMD,
+    store_cfg("{} {}".format(APP_GRP_CMD, group["group-name"]),
               "npf-cfg app-grp del {}".format(group["group-name"]),
               "DELETE",
               dbg)
