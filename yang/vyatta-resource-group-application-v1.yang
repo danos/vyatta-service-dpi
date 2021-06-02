@@ -22,7 +22,7 @@ module vyatta-resource-group-application-v1 {
 		 Web: www.att.com";
 
 	description
-		"Copyright (c) 2020, AT&T Intellectual Property
+		"Copyright (c) 2020-2021 AT&T Intellectual Property
 		 All rights reserved.
 
 		 Redistribution and use in source and binary forms,
@@ -61,6 +61,10 @@ module vyatta-resource-group-application-v1 {
 
 		 YANG module for application resource groups.";
 
+	revision 2021-06-02 {
+		description "Call end-app-res-grps just once";
+	}
+
 	revision 2020-08-06 {
 		description "Initial revision";
 	}
@@ -78,10 +82,10 @@ module vyatta-resource-group-application-v1 {
 	}
 
 	augment "/resources:resources/groups:group" {
+		configd:end "end-app-res-grps";
 		list application-group {
 			description  "Group of applications";
 			configd:help "Group of applications";
-			configd:end "end-app-res-grps";
 			key "group-name";
 			leaf group-name {
 				type fw-types:group-name;
